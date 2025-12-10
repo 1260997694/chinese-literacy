@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成人识字学习 - 语音版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+            line-height: 1.6;
+            background-color: #f5f9ff;
+            color: #333;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #4b6cb7, #182848);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .word-list {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .word-list h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4b6cb7;
+            font-size: 1.5rem;
+        }
+        
+        .word-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8fafc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid #4b6cb7;
+            font-size: 1.2rem;
+        }
+        
+        .word-item:hover {
+            background: #e8f4ff;
+            transform: translateX(5px);
+        }
+        
+        .word-item.active {
+            background: #dbeafe;
+            border-left-color: #1d4ed8;
+            font-weight: bold;
+        }
+        
+        .word-display {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            min-height: 400px;
+        }
+        
+        .chinese-character {
+            font-size: 5rem;
+            text-align: center;
+            margin: 20px 0;
+            color: #1e40af;
+            font-weight: bold;
+        }
+        
+        .pinyin {
+            font-size: 1.8rem;
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        
+        .meaning {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #334155;
+            background: #f1f5f9;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 5px solid #3b82f6;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .meaning h3 {
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .usage {
+            padding: 20px;
+            background: #fef7e6;
+            border-radius: 8px;
+            border-left: 5px solid #f59e0b;
+            position: relative;
+        }
+        
+        .usage h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .usage-example {
+            font-size: 1.1rem;
+            color: #78350f;
+            line-height: 1.7;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 140px;
+        }
+        
+        .btn-prev {
+            background: #64748b;
+            color: white;
+        }
+        
+        .btn-next {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-voice {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-stop {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .category-btn {
+            padding: 8px 16px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .voice-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .voice-btn {
+            padding: 8px 15px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .voice-btn:hover {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .voice-status {
+            padding: 10px;
+            margin-top: 10px;
+            background: #e8f7ff;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            color: #1e40af;
+            font-weight: bold;
+        }
+        
+        .voice-status.active {
+            display: block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .voice-icon {
+            font-size: 1.2rem;
+        }
+        
+        .btn-icon {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>成人识字学习 - 语音版</h1>
+        <p>精选汉字学习，点击按钮可听语音解释，微信内可直接使用</p>
+    </div>
+    
+    <div class="category-filter" id="categoryFilter">
+        <button class="category-btn active" data-category="all">全部汉字</button>
+        <button class="category-btn" data-category="personal">个人相关</button>
+        <button class="category-btn" data-category="family">家人称呼</button>
+        <button class="category-btn" data-category="numbers">数字</button>
+        <button class="category-btn" data-category="directions">方向位置</button>
+        <button class="category-btn" data-category="life">日常生活</button>
+    </div>
+    
+    <div class="container">
+        <div class="word-list" id="wordList">
+            <h2>汉字列表</h2>
+            <!-- 汉字列表将通过JavaScript动态生成 -->
+        </div>
+        
+        <div class="word-display" id="wordDisplay">
+            <div class="chinese-character" id="chineseChar">人</div>
+            <div class="pinyin" id="pinyin">rén</div>
+            
+            <div class="voice-controls">
+                <button class="voice-btn" id="playMeaningBtn">
+                    <span class="voice-icon">🔊</span> 听解释
+                </button>
+                <button class="voice-btn" id="playUsageBtn">
+                    <span class="voice-icon">🔊</span> 听例句
+                </button>
+            </div>
+            
+            <div class="voice-status" id="voiceStatus">
+                语音播放中...
+            </div>
+            
+            <div class="meaning" id="meaning">
+                <h3>
+                    <span>意思解释</span>
+                    <button class="voice-btn" id="playMeaningSmallBtn" style="font-size: 0.8rem; padding: 4px 10px;">
+                        <span class="voice-icon">🔊</span>
+                    </button>
+                </h3>
+                <p>人类，有智慧、能制造和使用工具进行劳动的高等动物。也指某种人，或指人的品质、性格。</p>
+            </div>
+            
+            <div class="usage" id="usage">
+                <h4>
+                    <span>使用示例</span>
+                    <button class="voice-btn" id="playUsageSmallBtn" style="font-size: 0.8rem; padding: 4px 10px;">
+                        <span class="voice-icon">🔊</span>
+                    </button>
+                </h4>
+                <p class="usage-example">1. 我是一个中国人。<br>
+                2. 这个人心地善良。<br>
+                3. 今天公园里人很多。</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn btn-prev" id="prevBtn">
+            <span class="btn-icon">◀</span> 上一个
+        </button>
+        <button class="btn btn-voice" id="voiceBtn">
+            <span class="btn-icon">🔊</span> 播放解释
+        </button>
+        <button class="btn btn-stop" id="stopBtn">
+            <span class="btn-icon">⏹</span> 停止播放
+        </button>
+        <button class="btn btn-next" id="nextBtn">
+            下一个 <span class="btn-icon">▶</span>
+        </button>
+    </div>
+    
+    <div class="footer">
+        <p>专为成人识字学习设计 | 大字体展示 | 语音解释功能 | 微信内可直接打开使用</p>
+        <p style="margin-top: 10px; font-size: 0.8rem;">提示：点击汉字可听解释，支持键盘左右键切换汉字</p>
+    </div>
+
+    <script>
+        // 汉字数据
+        const words = [
+            {
+                char: "人",
+                pinyin: "rén",
+                meaning: "人类，有智慧、能制造和使用工具进行劳动的高等动物。也指某种人，或指人的品质、性格。",
+                usage: "1. 我是一个中国人。<br>2. 这个人心地善良。<br>3. 今天公园里人很多。",
+                category: "personal"
+            },
+            {
+                char: "口",
+                pinyin: "kǒu",
+                meaning: "嘴巴，动物进食和发声的器官。也指出入通过的地方，如门口、港口。",
+                usage: "1. 请张开嘴巴（口）。<br>2. 医院入口在这里。<br>3. 这个村子有五百口人。",
+                category: "personal"
+            },
+            {
+                char: "手",
+                pinyin: "shǒu",
+                meaning: "人体上肢前端能拿东西的部分。也指擅长某种技能的人，或做某种事情的人。",
+                usage: "1. 我用右手写字。<br>2. 他是一把好手（技术好的人）。<br>3. 请举手回答问题。",
+                category: "personal"
+            },
+            {
+                char: "日",
+                pinyin: "rì",
+                meaning: "太阳。也表示一天，一昼夜。也指时间、光阴。",
+                usage: "1. 今天是个好天气。<br>2. 我每天（每日）锻炼身体。<br>3. 星期日我们休息。",
+                category: "life"
+            },
+            {
+                char: "月",
+                pinyin: "yuè",
+                meaning: "月亮，地球的卫星。也表示月份，一年分为十二个月。",
+                usage: "1. 今晚的月亮很圆。<br>2. 下个月我要去北京。<br>3. 一个月有30天左右。",
+                category: "life"
+            },
+            {
+                char: "水",
+                pinyin: "shuǐ",
+                meaning: "一种无色、无味、透明的液体，化学式为H₂O，是生命的重要组成部分。",
+                usage: "1. 请给我一杯水。<br>2. 自来水可以喝吗？<br>3. 水果里面有很多水分。",
+                category: "life"
+            },
+            {
+                char: "火",
+                pinyin: "huǒ",
+                meaning: "物体燃烧时发出的光和焰。也指紧急、火爆的脾气，或指枪炮弹药。",
+                usage: "1. 小心火烛。<br>2. 他脾气很火暴。<br>3. 消防员来灭火了。",
+                category: "life"
+            },
+            {
+                char: "山",
+                pinyin: "shān",
+                meaning: "地面上由土石构成的高耸部分。也指形状像山的东西。",
+                usage: "1. 我喜欢爬山。<br>2. 那座山很高。<br>3. 书堆得像山一样。",
+                category: "life"
+            },
+            {
+                char: "一",
+                pinyin: "yī",
+                meaning: "最小的正整数。也表示相同、整体、初次等意思。",
+                usage: "1. 我有一个孩子。<br>2. 我们一起去吧。<br>3. 我第一次来北京。",
+                category: "numbers"
+            },
+            {
+                char: "二",
+                pinyin: "èr",
+                meaning: "数字2，一加一的和。也指两样、第二次。",
+                usage: "1. 我有两个苹果。<br>2. 二月是第二个月。<br>3. 一分为二。",
+                category: "numbers"
+            },
+            {
+                char: "三",
+                pinyin: "sān",
+                meaning: "数字3，二加一的和。也表示多次或多数。",
+                usage: "1. 三个人一起走。<br>2. 再三考虑。<br>3. 三思而后行。",
+                category: "numbers"
+            },
+            {
+                char: "十",
+                pinyin: "shí",
+                meaning: "数字10，九加一的和。也表示完备、达到顶点。",
+                usage: "1. 我有十块钱。<br>2. 十全十美。<br>3. 十分感谢。",
+                category: "numbers"
+            },
+            {
+                char: "上",
+                pinyin: "shàng",
+                meaning: "位置在高处的，与\"下\"相对。也表示去、到，或表示时间、次序在前。",
+                usage: "1. 书在桌子上。<br>2. 我上班去了。<br>3. 上次我们见过面。",
+                category: "directions"
+            },
+            {
+                char: "下",
+                pinyin: "xià",
+                meaning: "位置在低处的，与\"上\"相对。也表示离开、降落，或表示时间、次序在后。",
+                usage: "1. 猫在椅子下。<br>2. 请下车。<br>3. 下次再见。",
+                category: "directions"
+            },
+            {
+                char: "大",
+                pinyin: "dà",
+                meaning: "在体积、面积、数量、力量、强度等方面超过一般或超过所比较的对象。",
+                usage: "1. 这个房子很大。<br>2. 他比我大两岁。<br>3. 大声说话。",
+                category: "life"
+            },
+            {
+                char: "小",
+                pinyin: "xiǎo",
+                meaning: "在体积、面积、数量、力量、强度等方面不及一般的或不及比较的对象。",
+                usage: "1. 这个箱子很小。<br>2. 我小时候住在农村。<br>3. 小声一点。",
+                category: "life"
+            },
+            {
+                char: "爸",
+                pinyin: "bà",
+                meaning: "父亲，爸爸。对生育自己的男子的称呼。",
+                usage: "1. 我爸爸是工人。<br>2. 爸爸，我回来了。<br>3. 他爸今年六十岁。",
+                category: "family"
+            },
+            {
+                char: "妈",
+                pinyin: "mā",
+                meaning: "母亲，妈妈。对生育自己的女子的称呼。",
+                usage: "1. 妈妈做的饭最好吃。<br>2. 我妈妈是教师。<br>3. 妈妈，我想你。",
+                category: "family"
+            },
+            {
+                char: "男",
+                pinyin: "nán",
+                meaning: "男性，男人。与\"女\"相对。也指儿子。",
+                usage: "1. 男卫生间在左边。<br>2. 这个男人很高。<br>3. 他有一男一女。",
+                category: "personal"
+            },
+            {
+                char: "女",
+                pinyin: "nǚ",
+                meaning: "女性，女人。与\"男\"相对。也指女儿。",
+                usage: "1. 女卫生间在右边。<br>2. 这个女人很善良。<br>3. 她生了一个女儿。",
+                category: "personal"
+            },
+            {
+                char: "吃",
+                pinyin: "chī",
+                meaning: "把食物等放到嘴里经过咀嚼咽下去。也指依靠某种事物来生活。",
+                usage: "1. 我们吃饭吧。<br>2. 吃药时间到了。<br>3. 他靠打工吃饭。",
+                category: "life"
+            },
+            {
+                char: "喝",
+                pinyin: "hē",
+                meaning: "把液体或流食咽下去。特指喝酒。",
+                usage: "1. 请喝水。<br>2. 我喜欢喝茶。<br>3. 他喝了一杯牛奶。",
+                category: "life"
+            }
+        ];
+
+        // 全局变量
+        let currentIndex = 0;
+        let filteredWords = [...words];
+        let currentCategory = 'all';
+        let isSpeaking = false;
+        let currentSpeech = null;
+
+        // 检查浏览器是否支持语音合成
+        function checkSpeechSupport() {
+            if (!('speechSynthesis' in window)) {
+                alert('您的浏览器不支持语音合成功能，语音功能将无法使用。建议使用最新版微信、Chrome或Edge浏览器。');
+                return false;
+            }
+            return true;
+        }
+
+        // 初始化汉字列表
+        function initWordList() {
+            const wordListElement = document.getElementById('wordList');
+            // 清空现有内容，但保留标题
+            const existingItems = document.querySelectorAll('.word-item');
+            existingItems.forEach(item => item.remove());
+            
+            // 添加新的汉字项
+            filteredWords.forEach((word, index) => {
+                const wordItem = document.createElement('div');
+                wordItem.className = `word-item ${index === currentIndex ? 'active' : ''}`;
+                wordItem.innerHTML = `
+                    <strong>${word.char}</strong> - ${word.pinyin}
+                `;
+                wordItem.addEventListener('click', () => {
+                    selectWord(index);
+                });
+                wordListElement.appendChild(wordItem);
+            });
+        }
+
+        // 选择汉字
+        function selectWord(index) {
+            currentIndex = index;
+            updateDisplay();
+            updateWordListSelection();
+            scrollToCurrentWord();
+            // 选择新字时停止正在播放的语音
+            stopSpeech();
+        }
+
+        // 更新显示区域
+        function updateDisplay() {
+            const word = filteredWords[currentIndex];
+            document.getElementById('chineseChar').textContent = word.char;
+            document.getElementById('pinyin').textContent = word.pinyin;
+            document.getElementById('meaning').innerHTML = `
+                <h3>
+                    <span>意思解释</span>
+                    <button class="voice-btn" id="playMeaningSmallBtn" style="font-size: 0.8rem; padding: 4px 10px;">
+                        <span class="voice-icon">🔊</span>
+                    </button>
+                </h3>
+                <p>${word.meaning}</p>
+            `;
+            document.getElementById('usage').innerHTML = `
+                <h4>
+                    <span>使用示例</span>
+                    <button class="voice-btn" id="playUsageSmallBtn" style="font-size: 0.8rem; padding: 4px 10px;">
+                        <span class="voice-icon">🔊</span>
+                    </button>
+                </h4>
+                <p class="usage-example">${word.usage}</p>
+            `;
+            
+            // 重新绑定小按钮事件
+            document.getElementById('playMeaningSmallBtn').addEventListener('click', playMeaning);
+            document.getElementById('playUsageSmallBtn').addEventListener('click', playUsage);
+        }
+
+        // 更新汉字列表选择状态
+        function updateWordListSelection() {
+            const wordItems = document.querySelectorAll('.word-item');
+            wordItems.forEach((item, index) => {
+                if (index === currentIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // 滚动到当前选中的汉字
+        function scrollToCurrentWord() {
+            const wordItems = document.querySelectorAll('.word-item');
+            if (wordItems[currentIndex]) {
+                wordItems[currentIndex].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+            }
+        }
+
+        // 按分类筛选
+        function setupCategoryFilter() {
+            const filterButtons = document.querySelectorAll('.category-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 更新按钮状态
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 获取分类
+                    currentCategory = this.getAttribute('data-category');
+                    
+                    // 筛选汉字
+                    if (currentCategory === 'all') {
+                        filteredWords = [...words];
+                    } else {
+                        filteredWords = words.filter(word => word.category === currentCategory);
+                    }
+                    
+                    // 重置索引并更新显示
+                    currentIndex = 0;
+                    initWordList();
+                    updateDisplay();
+                    // 停止语音
+                    stopSpeech();
+                });
+            });
+        }
+
+        // 语音功能
+        function speakText(text) {
+            // 停止当前语音
+            stopSpeech();
+            
+            // 检查浏览器支持
+            if (!checkSpeechSupport()) {
+                return;
+            }
+            
+            // 创建语音实例
+            const speech = new SpeechSynthesisUtterance();
+            speech.text = text;
+            speech.lang = 'zh-CN';
+            speech.rate = 0.9; // 语速稍慢
+            speech.pitch = 1; // 音调
+            speech.volume = 1; // 音量
+            
+            // 显示语音状态
+            document.getElementById('voiceStatus').classList.add('active');
+            isSpeaking = true;
+            currentSpeech = speech;
+            
+            // 语音结束事件
+            speech.onend = function() {
+                document.getElementById('voiceStatus').classList.remove('active');
+                isSpeaking = false;
+                currentSpeech = null;
+            };
+            
+            // 语音错误事件
+            speech.onerror = function(event) {
+                console.error('语音合成错误:', event);
+                document.getElementById('voiceStatus').classList.remove('active');
+                isSpeaking = false;
+                currentSpeech = null;
+                
+                // 微信环境下可能不支持，给出友好提示
+                if (isWeChatBrowser()) {
+                    document.getElementById('voiceStatus').textContent = "微信内语音功能有限制，请尝试使用手机浏览器打开";
+                    document.getElementById('voiceStatus').classList.add('active');
+                    setTimeout(() => {
+                        document.getElementById('voiceStatus').classList.remove('active');
+                    }, 3000);
+                }
+            };
+            
+            // 开始播放
+            window.speechSynthesis.speak(speech);
+        }
+
+        // 停止语音
+        function stopSpeech() {
+            if (window.speechSynthesis && isSpeaking) {
+                window.speechSynthesis.cancel();
+                document.getElementById('voiceStatus').classList.remove('active');
+                isSpeaking = false;
+                currentSpeech = null;
+            }
+        }
+
+        // 播放当前字的解释
+        function playMeaning() {
+            const word = filteredWords[currentIndex];
+            const text = `${word.char}，拼音${word.pinyin}，${word.meaning}`;
+            speakText(text);
+        }
+
+        // 播放当前字的例句
+        function playUsage() {
+            const word = filteredWords[currentIndex];
+            // 移除HTML标签，只保留文本
+            const usageText = word.usage.replace(/<br>/g, ' ').replace(/<\/?[^>]+(>|$)/g, "");
+            const text = `${word.char}的使用示例：${usageText}`;
+            speakText(text);
+        }
+
+        // 播放完整解释（解释+例句）
+        function playFullExplanation() {
+            const word = filteredWords[currentIndex];
+            const usageText = word.usage.replace(/<br>/g, ' ').replace(/<\/?[^>]+(>|$)/g, "");
+            const text = `${word.char}，拼音${word.pinyin}，${word.meaning}。使用示例：${usageText}`;
+            speakText(text);
+        }
+
+        // 检查是否在微信浏览器中
+        function isWeChatBrowser() {
+            const ua = navigator.userAgent.toLowerCase();
+            return ua.indexOf('micromessenger') !== -1;
+        }
+
+        // 添加上一个按钮功能
+        function prevWord() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                selectWord(currentIndex);
+            }
+        }
+
+        // 添加下一个按钮功能
+        function nextWord() {
+            if (currentIndex < filteredWords.length - 1) {
+                currentIndex++;
+                selectWord(currentIndex);
+            }
+        }
+
+        // 初始化语音按钮事件
+        function setupVoiceButtons() {
+            // 主要语音按钮
+            document.getElementById('voiceBtn').addEventListener('click', playFullExplanation);
+            document.getElementById('stopBtn').addEventListener('click', stopSpeech);
+            
+            // 小语音按钮（解释区域）
+            document.getElementById('playMeaningBtn').addEventListener('click', playMeaning);
+            document.getElementById('playUsageBtn').addEventListener('click', playUsage);
+            
+            // 上下一个按钮
+            document.getElementById('prevBtn').addEventListener('click', prevWord);
+            document.getElementById('nextBtn').addEventListener('click', nextWord);
+        }
+
+        // 初始化
+        function init() {
+            // 检查语音支持
+            checkSpeechSupport();
+            
+            initWordList();
+            updateDisplay();
+            setupCategoryFilter();
+            setupVoiceButtons();
+            
+            // 添加键盘支持
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    prevWord();
+                } else if (e.key === 'ArrowRight') {
+                    nextWord();
+                } else if (e.key === ' ' || e.key === 'Spacebar') {
+                    // 空格键播放/停止语音
+                    e.preventDefault();
+                    if (isSpeaking) {
+                        stopSpeech();
+                    } else {
+                        playFullExplanation();
+                    }
+                } else if (e.key === 'Escape') {
+                    // ESC键停止语音
+                    stopSpeech();
+                }
+            });
+            
+            // 微信环境提示
+            if (isWeChatBrowser()) {
+                const footer = document.querySelector('.footer');
+                const wechatTip = document.createElement('p');
+                wechatTip.style.cssText = 'margin-top: 10px; font-size: 0.8rem; color: #f59e0b;';
+                wechatTip.textContent = '提示：微信内语音功能可能受限，如需完整语音功能请点击右上角在浏览器中打开';
+                footer.appendChild(wechatTip);
+            }
+        }
+
+        // 页面加载完成后初始化 - 确保DOM完全加载
+        window.addEventListener('load', init);
+        
+        // 同时添加DOMContentLoaded作为备用
+        document.addEventListener('DOMContentLoaded', function() {
+            // 如果load事件没有触发，这里确保初始化
+            if (!window.pageInitialized) {
+                init();
+                window.pageInitialized = true;
+            }
+        });
+    </script>
+</body>
+</html>
