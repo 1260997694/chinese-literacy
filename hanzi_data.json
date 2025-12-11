@@ -1,0 +1,112 @@
+[
+    {
+        "char": "连续",
+        "pinyin": "lián xù",
+        "meaning": "启动设备的连续运行模式。在此模式下，设备将按照预设程序循环运行，直至收到停止或暂停指令。",
+        "usage": "用于需要设备长时间、不间断运行的场景，如流水线生产或耐力测试。",
+        "category": "btn_opentor",
+        "audio": {
+            "meaning": "audio/连续_meaning.mp3",
+            "usage": "audio/连续_usage.mp3"
+        }
+    },
+    {
+        "char": "复位",
+        "pinyin": "fù wèi",
+        "meaning": "将设备的运行状态、计数器和当前报警（如可复位）恢复到初始设定值。此操作通常用于故障清除后或新一轮生产开始前。",
+        "usage": "清除当前运行数据，使设备回到初始就绪状态。",
+        "category": "btn_opentor",
+        "audio": {
+            "meaning": "audio/复位_meaning.mp3",
+            "usage": "audio/复位_usage.mp3"
+        }
+    },
+    {
+        "char": "启动",
+        "pinyin": "qǐ dòng",
+        "meaning": "根据当前选定的模式和参数，开始执行设备的核心运行程序。",
+        "usage": "使设备从待机或暂停状态进入运行状态。",
+        "category": "btn_opentor",
+        "audio": {
+            "meaning": "audio/启动_meaning.mp3",
+            "usage": "audio/启动_usage.mp3"
+        }
+    },
+    {
+        "char": "暂停",
+        "pinyin": "zàn tíng",
+        "meaning": "临时中断设备的当前运行进程，保持设备当前状态和参数。暂停后可通过“启动”键恢复运行。",
+        "usage": "用于临时中止生产以进行人工干预、检查或调整。",
+        "category": "btn_opentor",
+        "audio": {
+            "meaning": "audio/暂停_meaning.mp3",
+            "usage": "audio/暂停_usage.mp3"
+        }
+    },
+    {
+        "char": "主界面",
+        "pinyin": "zhǔ jiè miàn",
+        "meaning": "设备上电后的默认显示界面。集中展示设备的核心运行状态、产量、关键参数及提供最常用操作的快捷入口。",
+        "usage": "监控设备整体运行概况和进行主要控制。",
+        "category": "opent_page",
+        "audio": {
+            "meaning": "audio/主界面_meaning.mp3",
+            "usage": "audio/主界面_usage.mp3"
+        }
+    },
+    {
+        "char": "设备调试",
+        "pinyin": "shè bèi tiáo shì",
+        "meaning": "用于设备安装、维护和维修时，对单个执行部件（如电机、气缸、传感器）进行独立点动、测试和参数校准的专用界面。",
+        "usage": "工程师用于设备组装后的功能测试或故障排查。",
+        "category": "opent_page",
+        "audio": {
+            "meaning": "audio/设备调试_meaning.mp3",
+            "usage": "audio/设备调试_usage.mp3"
+        }
+    },
+    {
+        "char": "功能参数",
+        "pinyin": "gōng néng cān shù",
+        "meaning": "设置设备基本工作模式、功能使能/禁用、逻辑选择等高层级参数的界面。",
+        "usage": "配置设备以适配不同的生产需求或产品型号。",
+        "category": "opent_page",
+        "audio": {
+            "meaning": "audio/功能参数_meaning.mp3",
+            "usage": "audio/功能参数_usage.mp3"
+        }
+    },
+    {
+        "char": "工艺参数",
+        "pinyin": "gōng yì cān shù",
+        "meaning": "设置设备具体运行工艺数据的界面，如温度、压力、速度、时间、位置等直接影响产品质量的参数。",
+        "usage": "操作员根据产品工艺要求，设定具体的生产参数。",
+        "category": "opent_page",
+        "audio": {
+            "meaning": "audio/工艺参数_meaning.mp3",
+            "usage": "audio/工艺参数_usage.mp3"
+        }
+    },
+    {
+        "char": "IO流控",
+        "pinyin": "I O liú kòng",
+        "meaning": "输入输出 Input/Output 与流程监控界面。以图形化方式实时显示所有传感器、开关、电磁阀等IO点的状态, 并可监控程序流程步骤。",
+        "usage": "用于高级故障诊断和程序流程分析。",
+        "category": "opent_page",
+        "audio": {
+            "meaning": "audio/IO流控_meaning.mp3",
+            "usage": "audio/IO流控_usage.mp3"
+        }
+    },
+    {
+        "char": "报警信息",
+        "pinyin": "bào jǐng xìn xī",
+        "meaning": "集中显示设备当前和历史上发生的所有报警、警告和提示信息的界面。通常包含报警编号、内容、发生时间及确认状态。",
+        "usage": "帮助操作和维护人员快速定位设备故障原因。",
+        "category": "opent_page",
+        "audio": {
+            "meaning": "audio/报警信息_meaning.mp3",
+            "usage": "audio/报警信息_usage.mp3"
+        }
+    }
+]
